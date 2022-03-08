@@ -1,0 +1,17 @@
+spring:
+  rabbitmq:
+    host: 101.132.151.4
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # 这个配置存在后，才可以在监听器ConsumerListener写入参数Channel
+    listener:
+      simple:
+        acknowledge-mode: manual  #开启手动ack
+        prefetch: 10              # 每次获取多少条消息
+
+rabbitmq:
+  exchange: "boot-exchange"
+  queue: "boot-queue"
+  routing: "*.black.*"
