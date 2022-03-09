@@ -31,6 +31,8 @@ public final class MessageConstant {
 
     public static final String RPC_QUEUE_CONSUMER = "rpc_consumer";
 
+    public static final String CONFIRMS_QUEUE_CONSUMER = "confirms";
+
 
 
 }
