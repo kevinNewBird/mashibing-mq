@@ -5,6 +5,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>rabbitmq</module>
+        <module>kafkamq</module>
+        <module>base-logs</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
