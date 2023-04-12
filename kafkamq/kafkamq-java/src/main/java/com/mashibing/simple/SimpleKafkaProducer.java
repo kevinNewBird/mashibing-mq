@@ -47,6 +47,14 @@ public class SimpleKafkaProducer {
         //kafka是一个app: : 使用零拷贝sendfile 系统调用实现快速数据消费
         config.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        /**
+         * 为确保消息发送的可靠性，提供了acks属性，关于acks取值的说明（0,1,-1）:
+         * 0: 生产者只管发送数据，即发送出去就认为是成功，缺点是：极有可能丢失数据（控制台打印的offset恒等于-1）
+         * 1: （默认值）生产者发送数据，只需需接收到leader的确认信号，其余broker到leader同步数据，解决了丢失数据
+         *      ，缺点是：效率会下降，在这里就会有几个节点的数据是不一致的，这就有了高水位和低水位的引出
+         * -1： 用于分布式，强调的是备机的同步（主机可能挂掉），需接收到ISR集合中的所有的确认信号，这个是三者中最严苛的。
+         */
+//        config.setProperty(ProducerConfig.ACKS_CONFIG, "0");
         // 指定自己的分区器
 //        config.setProperty(ProducerConfig.PARTITIONER_CLASS_CONFIG, SimplePartitioner.class.getName());
         Producer<String, String> producer = new KafkaProducer<>(config);
