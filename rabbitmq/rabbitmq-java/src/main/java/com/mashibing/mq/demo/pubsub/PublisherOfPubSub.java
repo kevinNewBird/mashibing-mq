@@ -56,6 +56,7 @@ public class PublisherOfPubSub {
 //            System.in.read();
         } catch (IOException | TimeoutException e) {
             log.error(String.format("通讯方式【%s】: 发送消息失败！", "pub/sub"), e);
+            e.printStackTrace();
         }
     }
 }
