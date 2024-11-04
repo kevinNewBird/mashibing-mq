@@ -45,6 +45,7 @@ public class PublisherOfHelloWorld {
 //            System.in.read();
         } catch (IOException | TimeoutException e) {
             log.error(String.format("通讯方式【%s】: 发送消息失败！", "hello world"), e);
+            e.printStackTrace();
         }
 
 

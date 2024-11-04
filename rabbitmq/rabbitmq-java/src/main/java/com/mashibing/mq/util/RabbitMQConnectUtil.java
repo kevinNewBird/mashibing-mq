@@ -16,20 +16,42 @@ import java.util.concurrent.TimeoutException;
  */
 public final class RabbitMQConnectUtil {
 
-    private static final String RABBITMQ_HOST = "172.22.124.60";
+    /**
+     * windows平台
+     */
+//    private static final String RABBITMQ_HOST = "172.22.124.60";
+
+    /**
+     * macbook pro平台
+     */
+    private static final String RABBITMQ_HOST = "10.211.55.13";
     private static final int RABBITMQ_PORT = 5672;
     private static final String RABBITMQ_VIRTUALHOST = "/";
-    private static final String RABBITMQ_USERNAME = "guest";
-    private static final String RABBITMQ_PASSWORD = "guest";
+
+    /**
+     * windows平台
+     */
+//    private static final String RABBITMQ_USERNAME = "guest";
+//    private static final String RABBITMQ_PASSWORD = "guest";
+
+    /**
+     * macbook pro平台
+     *
+     * 创建用户参考：https://www.modb.pro/db/334059
+     * 给用户添加访问host的权限
+     * rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
+     */
+    private static final String RABBITMQ_USERNAME = "test";
+    private static final String RABBITMQ_PASSWORD = "test";
 
     /**
      * description   建立rabbitmq连接对象  <BR>
-     *     <br/>
-     *     <br/>
-     *     文档参考 https://www.rabbitmq.com/api-guide.html#connecting
-     *     连接方式有多种，请根据需要自行在官网进行选择
+     * <br/>
+     * <br/>
+     * 文档参考 https://www.rabbitmq.com/api-guide.html#connecting
+     * 连接方式有多种，请根据需要自行在官网进行选择
      *
-      * @param :
+     * @param :
      * @return {@link Connection}
      * @author zhao.song  2022/3/7  11:23
      */
