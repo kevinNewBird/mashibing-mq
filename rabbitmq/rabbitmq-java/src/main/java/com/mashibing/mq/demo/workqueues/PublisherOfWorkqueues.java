@@ -4,6 +4,7 @@ import com.mashibing.mq.constant.MessageConstant;
 import com.mashibing.mq.util.RabbitMQConnectUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -24,6 +25,13 @@ public class PublisherOfWorkqueues {
 
     @Test
     public void publish() throws IOException {
+        /**
+         * 如何确保消息不会丢失？
+         * 需要做两件事：我们需要将队列和消息都标记为持久的。
+         * 1.声明队列未持久化队列（生产者和消费者）,即channel.queueDeclare的durable=true
+         * 2.标记发送的消息为持久化的（生产者）,即channel.basicPublish指定属性MessageProperties.PERSISTENT_TEXT_PLAIN其值deliverMode=2
+         */
+
         try (
                 // 1.获取连接对象
                 Connection conn = RabbitMQConnectUtil.buildConnection();
@@ -37,10 +45,13 @@ public class PublisherOfWorkqueues {
              *  autoDelete: 是否自动删除。true表示如果检测到该队列长时间没有被使用，服务器将自动删除它
              *  arguments: 其它参数设置
              */
-            channel.queueDeclare(MessageConstant.WORK_QUEUES_QUEUE_NAME, false, false, false, null);
+            // 3.1.声明队列未持久化队列, 即durable=true
+            channel.queueDeclare(MessageConstant.WORK_QUEUES_QUEUE_NAME, true, false, false, null);
             // 4.发布消息(默认交换机就是空串)
             for (int index = 0; index < 10; index++) {
-                channel.basicPublish("", MessageConstant.WORK_QUEUES_QUEUE_NAME, null, (index + "Hello world!").getBytes());
+                // 4.1.标记发送的消息为持久化的
+                channel.basicPublish("", MessageConstant.WORK_QUEUES_QUEUE_NAME
+                        , MessageProperties.PERSISTENT_TEXT_PLAIN, (index + "Hello world!").getBytes());
             }
 
             // 这段代码的作用是为了查看图形界面的connections和channels
