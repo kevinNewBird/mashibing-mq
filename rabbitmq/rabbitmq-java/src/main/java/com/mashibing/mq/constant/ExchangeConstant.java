@@ -28,6 +28,8 @@ public enum ExchangeConstant {
 
     DELAYED_DEAD_LETTER("delayed-dead-exchange", BuiltinExchangeType.DIRECT.getType()),
 
+    THRD_DELAYED("third-delayed-exchange","x-delayed-message"),
+
 
     ;
 
