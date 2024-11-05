@@ -32,10 +32,14 @@ public class GeneralConsumer {
             // 2.2.死信队列
             channel.exchangeDeclare(ExchangeConstant.DEAD_LETTER.getExchangeName(), ExchangeConstant.DEAD_LETTER.getExchangeType());
 
+            // 2.3.创建死信队列
+            channel.queueDeclare(MessageConstant.DEAD_QUEUE, false, false, false, null);
+            channel.queueBind(MessageConstant.DEAD_QUEUE, ExchangeConstant.DEAD_LETTER.getExchangeName(), MessageConstant.DEAD_ROUTING_KEY);
+
             // 3.声明普通队列
             Map<String, Object> arguments = new HashMap<>();
             // 3.1.过期时间
-            arguments.put("x-message-ttl", 1000);
+            arguments.put("x-message-ttl", 10000);
             // 3.2.正常队列设置死信交换机
             arguments.put("x-dead-letter-exchange", ExchangeConstant.DEAD_LETTER.getExchangeName());
             // 3.3.设置死信routing key
@@ -44,11 +48,8 @@ public class GeneralConsumer {
             arguments.put("x-max-length", 10);
 
             channel.queueDeclare(MessageConstant.DEAD_GENERAL_QUEUE, false, false, false, arguments);
-            channel.queueBind(MessageConstant.DEAD_GENERAL_QUEUE, ExchangeConstant.DEAD_GENERAL.getExchangeName(), MessageConstant.DEAD_GENERAL_ROUTING);
-
-            // 4.声明死信队列
-            channel.queueDeclare(MessageConstant.DEAD_QUEUE, false, false, false, null);
-            channel.queueBind(MessageConstant.DEAD_QUEUE, ExchangeConstant.DEAD_LETTER.getExchangeName(), MessageConstant.DEAD_ROUTING_KEY);
+            channel.queueBind(MessageConstant.DEAD_GENERAL_QUEUE, ExchangeConstant.DEAD_GENERAL.getExchangeName()
+                    , MessageConstant.DEAD_GENERAL_ROUTING);
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 try {
@@ -73,7 +74,7 @@ public class GeneralConsumer {
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (Exception e) {
-            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "routing"));
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "direct"));
             e.printStackTrace();
         }
     }

@@ -8,6 +8,9 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * description: 普通交换机（生产死信信息）
  * company: 北京海量数据有限公司
@@ -34,8 +37,17 @@ public class DeadLetterPublisher {
             channel.exchangeDeclare(ExchangeConstant.DEAD_GENERAL.getExchangeName()
                     , ExchangeConstant.DEAD_GENERAL.getExchangeType());
 
-            // 3.创建队列
-            channel.queueDeclare(MessageConstant.DEAD_GENERAL_QUEUE, false, false, false, null);
+            // 3.声明普通队列
+            Map<String, Object> arguments = new HashMap<>();
+            // 3.1.过期时间
+            arguments.put("x-message-ttl", 10000);
+            // 3.2.正常队列设置死信交换机
+            arguments.put("x-dead-letter-exchange", ExchangeConstant.DEAD_LETTER.getExchangeName());
+            // 3.3.设置死信routing key
+            arguments.put("x-dead-letter-routing-key", MessageConstant.DEAD_ROUTING_KEY);
+            // 3.4.设置正常队列长度限制
+            arguments.put("x-max-length", 10);
+            channel.queueDeclare(MessageConstant.DEAD_GENERAL_QUEUE, false, false, false, arguments);
             channel.queueBind(MessageConstant.DEAD_GENERAL_QUEUE, ExchangeConstant.DEAD_GENERAL.getExchangeName()
                     , MessageConstant.DEAD_GENERAL_ROUTING);
 
@@ -50,7 +62,7 @@ public class DeadLetterPublisher {
                         , props, String.format("[%s] dead letter test", i).getBytes());
             }
         } catch (Exception ex) {
-            System.err.println(String.format("[dead letter] 通讯方式【%s】: 发送消息失败！", "routing"));
+            System.err.println(String.format("[dead letter] 通讯方式【%s】: 发送消息失败！", "direct"));
             ex.printStackTrace();
         }
     }

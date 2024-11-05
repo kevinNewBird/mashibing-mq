@@ -49,7 +49,7 @@ public class DeadLetterConsumer {
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (Exception e) {
-            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "dead letter"));
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "direct"));
             e.printStackTrace();
         }
     }
