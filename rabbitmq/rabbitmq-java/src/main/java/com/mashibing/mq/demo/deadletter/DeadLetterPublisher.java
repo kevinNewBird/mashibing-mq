@@ -52,6 +52,7 @@ public class DeadLetterPublisher {
                     , MessageConstant.DEAD_GENERAL_ROUTING);
 
             // 设置过期时间
+            // 如果同时配置了队列的 TTL 和消息的TTL，那么较小的那个值将会被使用，有两种方式设置 TTL
             AMQP.BasicProperties props = new AMQP.BasicProperties().builder()
                     .expiration("1000")
                     .build();

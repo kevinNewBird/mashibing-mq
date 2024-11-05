@@ -6,13 +6,9 @@ import com.mashibing.mq.util.RabbitMQConnectUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.DeliverCallback;
-import com.rabbitmq.client.Delivery;
 import org.junit.Test;
-import sun.plugin2.message.Message;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeoutException;
 
 /**
  * description: 死信队列
