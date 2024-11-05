@@ -75,7 +75,7 @@ public class PublisherOfPubSub {
             channel.queueBind(MessageConstant.PUB_SUB_QUEUE_NAME2
                     , ExchangeConstant.PUBSUB.getExchangeName(), "");
 
-            // 6.发布消息到交换机
+            // 6.发布消息到交换机(fanout类型的交换机会忽略routingKey,所以无需传入)
             channel.basicPublish(ExchangeConstant.PUBSUB.getExchangeName(), "", null, "Hello world!".getBytes());
 
             // 这段代码的作用是为了查看图形界面的connections和channels

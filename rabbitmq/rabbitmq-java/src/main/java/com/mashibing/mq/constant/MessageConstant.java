@@ -22,6 +22,12 @@ public final class MessageConstant {
 
     public static final String ROUTING_QUEUE_NAME2 = "routing2";
 
+    public static final String ROUTING_KEY1 = "rk1";
+
+    public static final String ROUTING_KEY2 = "rk2";
+
+    public static final String ROUTING_KEY3 = "rk3";
+
 
     public static final String TOPICS_QUEUE_NAME1 = "topic1";
 
@@ -32,7 +38,6 @@ public final class MessageConstant {
     public static final String RPC_QUEUE_CONSUMER = "rpc_consumer";
 
     public static final String CONFIRMS_QUEUE_CONSUMER = "confirms";
-
 
 
 }
