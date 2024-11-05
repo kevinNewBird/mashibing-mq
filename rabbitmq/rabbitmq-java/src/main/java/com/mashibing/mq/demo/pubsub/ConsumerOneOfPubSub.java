@@ -56,7 +56,7 @@ public class ConsumerOneOfPubSub {
                 System.out.println("[pub/sub] received '" + message + "'");
             };
             // 4.接收消息
-            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
+            channel.basicConsume(queueName, false, deliverCallback, consumerTag -> {
             });
             // 阻塞，保证线程可以消费到
             System.in.read();
