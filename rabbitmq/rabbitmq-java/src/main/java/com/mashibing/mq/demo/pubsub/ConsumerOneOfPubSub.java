@@ -22,6 +22,12 @@ import java.util.concurrent.TimeoutException;
 public class ConsumerOneOfPubSub {
 
     /**
+     * 两者消费可以混用
+     * 即：临时队列和保留队列
+     */
+
+
+    /**
      * description: 广播的特点：只接收最新的消息（不关注历史的数据）
      * create by: zhaosong 2024/11/5 11:54
      */
@@ -61,7 +67,7 @@ public class ConsumerOneOfPubSub {
     }
 
     /**
-     * description: 广播的特点：只接收最新的消息（不关注历史的数据）
+     * description: 广播的特点：只接收最新的消息（关注历史的数据）
      * create by: zhaosong 2024/11/5 11:55
      */
     @Test
