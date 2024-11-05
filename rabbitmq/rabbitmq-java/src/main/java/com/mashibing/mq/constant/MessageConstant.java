@@ -39,5 +39,11 @@ public final class MessageConstant {
 
     public static final String CONFIRMS_QUEUE_CONSUMER = "confirms";
 
+    public static final String DEAD_GENERAL_QUEUE = "dead-general-queue";
+    public static final String DEAD_GENERAL_ROUTING = "dead-general-rk";
+
+    public static final String DEAD_QUEUE = "dead-queue";
+    public static final String DEAD_ROUTING_KEY = "dead-queue-rk";
+
 
 }

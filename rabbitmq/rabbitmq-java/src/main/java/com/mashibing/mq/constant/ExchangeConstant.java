@@ -20,6 +20,10 @@ public enum ExchangeConstant {
 
 
     TOPICS("topics", BuiltinExchangeType.TOPIC.getType()),
+
+    DEAD_GENERAL("dead-general-exchange", BuiltinExchangeType.DIRECT.getType()),
+
+    DEAD_LETTER("dead-exchange", BuiltinExchangeType.DIRECT.getType()),
     ;
 
     @Getter
