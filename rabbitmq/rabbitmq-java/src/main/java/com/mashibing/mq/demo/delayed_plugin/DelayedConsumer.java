@@ -31,11 +31,7 @@ public class DelayedConsumer {
                     , true, false, arguments);
 
             /// 创建一个延时队列
-            Map<String, Object> queueArgs = new HashMap<>();
-            queueArgs.put("x-dead-letter-exchange", "");
-            queueArgs.put("x-dead-letter-routing-key", DelayedPublisher.ROUTING_KEY);
-            queueArgs.put("x-message-ttl", 30000);
-            channel.queueDeclare(DelayedPublisher.QUEUE_NAME, true, false, false, queueArgs);
+            channel.queueDeclare(DelayedPublisher.QUEUE_NAME, true, false, false, null);
             channel.queueBind(DelayedPublisher.QUEUE_NAME, ExchangeConstant.THRD_DELAYED.getExchangeName(), DelayedPublisher.ROUTING_KEY);
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {

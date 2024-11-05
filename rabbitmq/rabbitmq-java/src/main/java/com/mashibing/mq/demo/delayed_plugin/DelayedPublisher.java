@@ -38,16 +38,18 @@ public class DelayedPublisher {
                     , true, false, arguments);
 
             // 创建一个延时队列
-            Map<String, Object> queueArgs = new HashMap<>();
-            queueArgs.put("x-dead-letter-exchange", "");
-            queueArgs.put("x-dead-letter-routing-key", ROUTING_KEY);
-            queueArgs.put("x-message-ttl", 30000);
-            channel.queueDeclare(QUEUE_NAME, true, false, false, queueArgs);
+//            Map<String, Object> queueArgs = new HashMap<>();
+//            queueArgs.put("x-dead-letter-exchange", "");
+//            queueArgs.put("x-dead-letter-routing-key", ROUTING_KEY);
+//            queueArgs.put("x-message-ttl", 30000);
+            channel.queueDeclare(QUEUE_NAME, true, false, false, null);
             channel.queueBind(QUEUE_NAME, ExchangeConstant.THRD_DELAYED.getExchangeName(), ROUTING_KEY);
 
             // 发送消息到延时队列中
+            Map<String, Object> headers = new HashMap<>();
+            headers.put("x-delay", 5000);
             AMQP.BasicProperties props = new AMQP.BasicProperties().builder()
-                    .expiration("30000")
+                    .headers(headers)
                     .build();
             channel.basicPublish(ExchangeConstant.THRD_DELAYED.getExchangeName(), ROUTING_KEY
                     , props, "[third delayed] hello delayed queue".getBytes());
