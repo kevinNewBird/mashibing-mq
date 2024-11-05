@@ -24,27 +24,59 @@ import java.util.concurrent.TimeoutException;
 @Slf4j
 public class ConsumerTwoOfPubSub {
 
+    /**
+     * description: 广播的特点：只接收最新的消息（不关注历史的数据）
+     * create by: zhaosong 2024/11/5 11:55
+     */
     @Test
     public void consume() {
-        try (final Connection conn = RabbitMQConnectUtil.buildConnection();
-             final Channel channel = conn.createChannel()) {
+        try (final Connection conn = RabbitMQConnectUtil.buildConnection(); final Channel channel = conn.createChannel()) {
             // 1.指定交换机
-            channel.exchangeDeclare(ExchangeConstant.PUBSUB.getExchangeName()
-                    , ExchangeConstant.PUBSUB.getExchangeType());
+            channel.exchangeDeclare(ExchangeConstant.PUBSUB.getExchangeName(), ExchangeConstant.PUBSUB.getExchangeType());
             channel.basicQos(1);
             // 2.获取分配队列的名字，并绑定
             final String queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName
-                    , ExchangeConstant.PUBSUB.getExchangeName(), "");
+            channel.queueBind(queueName, ExchangeConstant.PUBSUB.getExchangeName(), "");
             // 3.
-            DeliverCallback deliverCallback = (consumerTag,delivery)->{
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "utf-8");
                 final Envelope envelope = delivery.getEnvelope();
                 channel.basicAck(envelope.getDeliveryTag(), false);
                 System.out.println("[pub/sub] received '" + message + "'");
             };
             // 4.接收消息
-            channel.basicConsume(MessageConstant.PUB_SUB_QUEUE_NAME2, deliverCallback, consumerTag -> {});
+            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
+            });
+            // 阻塞，保证线程可以消费到
+            System.in.read();
+        } catch (IOException | TimeoutException e) {
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "pub/sub"));
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * description: 广播的特点：只接收最新的消息（关注历史的数据）
+     * create by: zhaosong 2024/11/5 11:55
+     */
+    @Test
+    public void consumeOld() {
+        try (final Connection conn = RabbitMQConnectUtil.buildConnection(); final Channel channel = conn.createChannel()) {
+            // 1.指定交换机
+            channel.exchangeDeclare(ExchangeConstant.PUBSUB.getExchangeName(), ExchangeConstant.PUBSUB.getExchangeType());
+            channel.basicQos(1);
+            // 2.获取分配队列的名字，并绑定
+            channel.queueBind(MessageConstant.PUB_SUB_QUEUE_NAME2, ExchangeConstant.PUBSUB.getExchangeName(), "");
+            // 3.
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+                String message = new String(delivery.getBody(), "utf-8");
+                final Envelope envelope = delivery.getEnvelope();
+                channel.basicAck(envelope.getDeliveryTag(), false);
+                System.out.println("[pub/sub] received '" + message + "'");
+            };
+            // 4.接收消息
+            channel.basicConsume(MessageConstant.PUB_SUB_QUEUE_NAME2, deliverCallback, consumerTag -> {
+            });
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (IOException | TimeoutException e) {

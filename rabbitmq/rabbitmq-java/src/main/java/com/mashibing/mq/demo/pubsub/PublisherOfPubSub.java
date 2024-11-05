@@ -22,9 +22,35 @@ import java.util.concurrent.TimeoutException;
 @Slf4j
 public class PublisherOfPubSub {
 
-
+    /**
+     * description: 广播数据（历史数据不关注，所以未指定队列。由客户端连接时，创建的临时队列接收信息，接收完临时队列被回收）
+     * create by: zhaosong 2024/11/5 11:57
+     */
     @Test
     public void publish() {
+        try (Connection conn = RabbitMQConnectUtil.buildConnection();
+             // 1.构建通道channel
+             Channel channel = conn.createChannel()
+        ) {
+            // 2.构建交换机
+            channel.exchangeDeclare(ExchangeConstant.PUBSUB.getExchangeName()
+                    , ExchangeConstant.PUBSUB.getExchangeType());
+
+            // 3.发送消息
+            channel.basicPublish(ExchangeConstant.PUBSUB.getExchangeName(),
+                    "", null, "Hello world!".getBytes());
+        } catch (Exception ex) {
+            System.err.println(String.format("通讯方式【%s】: 发送消息失败！", "pub/sub"));
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * description: 广播数据（保留历史数据，广播到指定队列）
+     * create by: zhaosong 2024/11/5 11:57
+     */
+    @Test
+    public void publishOld() {
         try (
                 // 1.获取连接对象
                 Connection conn = RabbitMQConnectUtil.buildConnection();
@@ -50,7 +76,7 @@ public class PublisherOfPubSub {
                     , ExchangeConstant.PUBSUB.getExchangeName(), "");
 
             // 6.发布消息到交换机
-            channel.basicPublish(ExchangeConstant.PUBSUB.getExchangeName(),"", null, "Hello world!".getBytes());
+            channel.basicPublish(ExchangeConstant.PUBSUB.getExchangeName(), "", null, "Hello world!".getBytes());
 
             // 这段代码的作用是为了查看图形界面的connections和channels
 //            System.in.read();
