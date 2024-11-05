@@ -16,10 +16,10 @@ public enum ExchangeConstant {
 
     PUBSUB("pubsub", BuiltinExchangeType.FANOUT.getType()),
 
-    ROUTING("routing",BuiltinExchangeType.DIRECT.getType()),
+    ROUTING("routing", BuiltinExchangeType.DIRECT.getType()),
 
 
-    TOPICS("topics",BuiltinExchangeType.TOPIC.getType()),
+    TOPICS("topics", BuiltinExchangeType.TOPIC.getType()),
     ;
 
     @Getter

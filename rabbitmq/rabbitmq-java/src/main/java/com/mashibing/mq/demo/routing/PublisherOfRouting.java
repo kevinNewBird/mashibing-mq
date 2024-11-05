@@ -24,6 +24,11 @@ import static com.mashibing.mq.constant.ExchangeConstant.ROUTING;
 @Slf4j
 public class PublisherOfRouting {
 
+    /**
+     * 本质上是direct交换机，是对fanout交换机的一种场景的扩展
+     * description:
+     * create by: zhaosong 2024/11/5 15:07
+     */
     @Test
     public void publish() {
         try (

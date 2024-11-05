@@ -25,29 +25,74 @@ import static com.mashibing.mq.constant.ExchangeConstant.TOPICS;
 @Slf4j
 public class ConsumerTwoOfTopics {
 
+    /**
+     * description:临时队列
+     * create by: zhaosong 2024/11/5 15:19
+     */
     @Test
     public void consume() {
         try (final Connection conn = RabbitMQConnectUtil.buildConnection();
              final Channel channel = conn.createChannel()) {
             // 1.指定交换机
             channel.exchangeDeclare(TOPICS.getExchangeName()
-                    ,TOPICS.getExchangeType());
+                    , TOPICS.getExchangeType());
             channel.basicQos(1);
             // 2.获取分配队列的名字，并绑定
-            final String queueName = channel.queueDeclare().getQueue();
+            String queueName = channel.queueDeclare().getQueue();// 创建临时队列
             channel.queueBind(queueName
-                    , TOPICS.getExchangeName(), "*.*.rabbit");
+                    , TOPICS.getExchangeName(), "*.orange.*");
             channel.queueBind(queueName
                     , TOPICS.getExchangeName(), "lazy.#");
             // 3.
-            DeliverCallback deliverCallback = (consumerTag,delivery)->{
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+                try {
+                    String message = new String(delivery.getBody(), "utf-8");
+                    final Envelope envelope = delivery.getEnvelope();
+                    System.out.println("[topics] received '" + message + "'");
+                } finally {
+                    // 手动确认信息
+                    channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+                }
+            };
+            // 4.接收消息（关闭自动确认，autoAck=false）
+            channel.basicConsume(queueName, false, deliverCallback, consumerTag -> {
+            });
+            // 阻塞，保证线程可以消费到
+            System.in.read();
+        } catch (IOException | TimeoutException e) {
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "topics"));
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * description:保留队列
+     * create by: zhaosong 2024/11/5 15:18
+     */
+    @Test
+    public void consumeOld() {
+        try (final Connection conn = RabbitMQConnectUtil.buildConnection();
+             final Channel channel = conn.createChannel()) {
+            // 1.指定交换机
+            channel.exchangeDeclare(TOPICS.getExchangeName()
+                    , TOPICS.getExchangeType());
+            channel.basicQos(1);
+            // 2.获取分配队列的名字，并绑定
+            channel.queueBind(MessageConstant.TOPICS_QUEUE_NAME2
+                    , TOPICS.getExchangeName(), "*.*.rabbit");
+            channel.queueBind(MessageConstant.TOPICS_QUEUE_NAME2
+                    , TOPICS.getExchangeName(), "lazy.#");
+            // 3.
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "utf-8");
                 final Envelope envelope = delivery.getEnvelope();
                 channel.basicAck(envelope.getDeliveryTag(), false);
                 System.out.println("[topics] received '" + message + "'");
             };
             // 4.接收消息
-            channel.basicConsume(MessageConstant.TOPICS_QUEUE_NAME2, deliverCallback, consumerTag -> {});
+            channel.basicConsume(MessageConstant.TOPICS_QUEUE_NAME2, deliverCallback, consumerTag -> {
+            });
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (IOException | TimeoutException e) {
