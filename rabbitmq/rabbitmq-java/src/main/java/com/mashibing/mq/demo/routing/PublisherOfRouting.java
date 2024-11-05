@@ -51,7 +51,8 @@ public class PublisherOfRouting {
             channel.basicPublish(ROUTING.getExchangeName(),"rk2", null, "[rk2] Hello world!".getBytes());
             channel.basicPublish(ROUTING.getExchangeName(),"rk3", null, "[rk3] Hello world!".getBytes());
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 发送消息失败！", "routing"), e);
+            System.err.println(String.format("通讯方式【%s】: 发送消息失败！", "routing"));
+            e.printStackTrace();
         }
     }
 }

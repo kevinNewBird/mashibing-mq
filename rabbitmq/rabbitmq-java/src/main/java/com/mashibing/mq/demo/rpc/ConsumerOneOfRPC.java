@@ -46,7 +46,8 @@ public class ConsumerOneOfRPC {
             });
             System.in.read();
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 接收消息失败！", "rpc"), e);
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "rpc"));
+            e.printStackTrace();
         }
     }
 }

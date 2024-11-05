@@ -31,20 +31,21 @@ public class ConsumerTwoOfWorkqueues {
 
             // 2.监听消息
             // 2.1.构建监听消息的回调
-            DefaultConsumer consumer = new DefaultConsumer(channel){
+            DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                     System.out.println("消费者Two接收到的消息：" + new String(body, "utf-8"));
                     // （！！！）手动ack
-                    channel.basicAck(envelope.getDeliveryTag(),false);
+                    channel.basicAck(envelope.getDeliveryTag(), false);
                 }
             };
             // 2.2.开启监听消息
-            channel.basicConsume(MessageConstant.WORK_QUEUES_QUEUE_NAME,false, consumer);
+            channel.basicConsume(MessageConstant.WORK_QUEUES_QUEUE_NAME, false, consumer);
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 接收消息失败！", "workqueues"), e);
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "workqueues"));
+            e.printStackTrace();
         }
     }
 
@@ -59,18 +60,19 @@ public class ConsumerTwoOfWorkqueues {
 
             // 2.监听消息
             // 2.1.构建监听消息的回调
-            DefaultConsumer consumer = new DefaultConsumer(channel){
+            DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                     System.out.println("消费者接收到的消息：" + new String(body, "utf-8"));
                 }
             };
             // 2.2.开启监听消息
-            channel.basicConsume(MessageConstant.WORK_QUEUES_QUEUE_NAME,true, consumer);
+            channel.basicConsume(MessageConstant.WORK_QUEUES_QUEUE_NAME, true, consumer);
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 接收消息失败！", "workqueues"), e);
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "workqueues"));
+            e.printStackTrace();
         }
     }
 }

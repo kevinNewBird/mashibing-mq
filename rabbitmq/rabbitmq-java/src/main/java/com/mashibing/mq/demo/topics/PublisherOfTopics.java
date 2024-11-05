@@ -55,7 +55,8 @@ public class PublisherOfTopics {
             channel.basicPublish(TOPICS.getExchangeName(),"small.white.rabbit", null, "小白兔！".getBytes());
             channel.basicPublish(TOPICS.getExchangeName(),"lazy.dog.dog.dog", null, "懒狗狗狗狗狗狗狗".getBytes());
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 发送消息失败！", "topics"), e);
+            System.err.println(String.format("通讯方式【%s】: 发送消息失败！", "topics"));
+            e.printStackTrace();
         }
     }
 }

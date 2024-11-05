@@ -45,7 +45,8 @@ public class PublisherOfWorkqueues {
 
             // 这段代码的作用是为了查看图形界面的connections和channels
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 发送消息失败！", "workqueues"), e);
+            System.err.println(String.format("通讯方式【%s】: 发送消息失败！", "workqueues"));
+            e.printStackTrace();
         }
 
 

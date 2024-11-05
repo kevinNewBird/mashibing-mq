@@ -45,7 +45,7 @@ public class ConsumerOneOfPubSub {
             // 阻塞，保证线程可以消费到
             System.in.read();
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 接收消息失败！", "pub/sub"), e);
+            System.err.println(String.format("通讯方式【%s】: 接收消息失败！", "pub/sub"));
             e.printStackTrace();
         }
     }

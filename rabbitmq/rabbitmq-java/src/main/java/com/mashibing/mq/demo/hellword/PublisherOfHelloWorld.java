@@ -44,7 +44,7 @@ public class PublisherOfHelloWorld {
             // 这段代码的作用是为了查看图形界面的connections和channels
 //            System.in.read();
         } catch (IOException | TimeoutException e) {
-            log.error(String.format("通讯方式【%s】: 发送消息失败！", "hello world"), e);
+            System.err.println(String.format("通讯方式【%s】: 发送消息失败！", "hello world"));
             e.printStackTrace();
         }
 

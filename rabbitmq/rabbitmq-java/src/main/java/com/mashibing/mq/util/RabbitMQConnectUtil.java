@@ -2,6 +2,7 @@ package com.mashibing.mq.util;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -24,7 +25,7 @@ public final class RabbitMQConnectUtil {
     /**
      * macbook pro平台
      */
-    private static final String RABBITMQ_HOST = "10.211.55.13";
+    private static final String RABBITMQ_HOST;
     private static final int RABBITMQ_PORT = 5672;
     private static final String RABBITMQ_VIRTUALHOST = "/";
 
@@ -36,13 +37,26 @@ public final class RabbitMQConnectUtil {
 
     /**
      * macbook pro平台
-     *
+     * <p>
      * 创建用户参考：https://www.modb.pro/db/334059
      * 给用户添加访问host的权限
      * rabbitmqctl set_permissions -p / test ".*" ".*" ".*"
      */
-    private static final String RABBITMQ_USERNAME = "test";
-    private static final String RABBITMQ_PASSWORD = "test";
+    private static final String RABBITMQ_USERNAME;
+    private static final String RABBITMQ_PASSWORD;
+
+    static {
+        String os = System.getProperty("os.name");
+        if (StringUtils.containsIgnoreCase(os, "windows")) {
+            RABBITMQ_HOST = "172.22.124.60";
+            RABBITMQ_USERNAME = "guest";
+            RABBITMQ_PASSWORD = "guest";
+        } else { // mac
+            RABBITMQ_HOST = "10.211.55.13";
+            RABBITMQ_USERNAME = "test";
+            RABBITMQ_PASSWORD = "test";
+        }
+    }
 
     /**
      * description   建立rabbitmq连接对象  <BR>
