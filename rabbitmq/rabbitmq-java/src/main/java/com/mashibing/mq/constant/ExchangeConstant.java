@@ -1,7 +1,6 @@
 package com.mashibing.mq.constant;
 
 import com.rabbitmq.client.BuiltinExchangeType;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -24,6 +23,12 @@ public enum ExchangeConstant {
     DEAD_GENERAL("dead-general-exchange", BuiltinExchangeType.DIRECT.getType()),
 
     DEAD_LETTER("dead-exchange", BuiltinExchangeType.DIRECT.getType()),
+
+    DELAYED("delayed-exchange", BuiltinExchangeType.DIRECT.getType()),
+
+    DELAYED_DEAD_LETTER("delayed-dead-exchange", BuiltinExchangeType.DIRECT.getType()),
+
+
     ;
 
     @Getter

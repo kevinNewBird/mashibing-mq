@@ -45,5 +45,13 @@ public final class MessageConstant {
     public static final String DEAD_QUEUE = "dead-queue";
     public static final String DEAD_ROUTING_KEY = "dead-queue-rk";
 
+    public static final String DELAYED_PRIME_QUEUE = "delayed-prime-queue";
+
+    public static final String DELAYED_PRIME_ROUTING = "delayed-prime-rk";
+
+    public static final String DELAYED_DEAD_QUEUE = "delayed-dead-queue";
+
+    public static final String DELAYED_DEAD_ROUTING = "delayed-dead-rk";
+
 
 }
