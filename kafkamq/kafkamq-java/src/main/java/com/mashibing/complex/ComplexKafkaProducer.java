@@ -1,5 +1,6 @@
 package com.mashibing.complex;
 
+import com.mashibing.base.BaseKafkaConstant;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.clients.producer.internals.DefaultPartitioner;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -25,7 +26,7 @@ public class ComplexKafkaProducer {
     private static Properties initConf() {
         Properties conf = new Properties();
 
-        conf.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.12:9092");
+        conf.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
 
         conf.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         conf.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());

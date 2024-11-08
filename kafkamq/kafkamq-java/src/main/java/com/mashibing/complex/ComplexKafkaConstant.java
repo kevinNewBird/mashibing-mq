@@ -10,5 +10,4 @@ public class ComplexKafkaConstant {
 
     public static final String COMPLEX_TOPIC = "complex-s001";
 
-    public static final String BOOT_SERVERS = "192.168.1.12:9092";
 }

@@ -1,5 +1,6 @@
 package com.mashibing.simple;
 
+import com.mashibing.base.BaseKafkaConstant;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -29,7 +30,7 @@ public class SimpleKafkaConsumer {
     @Test
     public void consumer0() {
         Properties config = new Properties();
-        config.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.12:9092");
+        config.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
         // 编解码
         config.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -126,7 +127,7 @@ public class SimpleKafkaConsumer {
     @Test
     public void consumer1() {
         Properties config = new Properties();
-        config.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.12:9092");
+        config.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
         // 编解码
         config.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -238,7 +239,7 @@ public class SimpleKafkaConsumer {
     @Test
     public void consumer2() {
         Properties config = new Properties();
-        config.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.12:9092");
+        config.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
         // 编解码
         config.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());

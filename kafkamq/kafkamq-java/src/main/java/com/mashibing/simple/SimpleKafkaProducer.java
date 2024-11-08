@@ -1,5 +1,6 @@
 package com.mashibing.simple;
 
+import com.mashibing.base.BaseKafkaConstant;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class SimpleKafkaProducer {
         // 配置kafka生产者
         Properties config = new Properties();
         // 注：确保服务器的防火墙关闭
-        config.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.12:9092");
+        config.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
 
         //kafka 持久化数据的MQ 数据-> byte[]，不会对数据进行干预，双方要约定编解码
         //kafka是一个app: : 使用零拷贝sendfile 系统调用实现快速数据消费
