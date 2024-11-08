@@ -1,16 +1,22 @@
 package com.mashibing.complex;
 
 import com.mashibing.base.BaseKafkaConstant;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.clients.producer.internals.DefaultPartitioner;
+import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.Future;
+
+import static com.mashibing.complex.ComplexKafkaConstant.COMPLEX_TOPIC;
 
 /**
  * description: com.mashibing.complex
@@ -21,6 +27,26 @@ import java.util.concurrent.Future;
 public class ComplexKafkaProducer {
 
     private static final Logger logger = LoggerFactory.getLogger(ComplexKafkaProducer.class);
+
+    @Before
+    public void createTopic() {
+        // kafka配置连接信息
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
+        try (AdminClient admin = AdminClient.create(props);) {
+            KafkaFuture<Boolean> existFuture = admin.describeTopics(Collections.singleton(COMPLEX_TOPIC)).allTopicNames().thenApply(map -> map.containsKey(COMPLEX_TOPIC));
+            Boolean isExists = existFuture.get();
+            // 判断是否存在
+            if (isExists) {
+                return;
+            }
+            NewTopic newTopic = new NewTopic(COMPLEX_TOPIC, 3, (short) 2);
+            // 阻塞等待其完成
+            admin.createTopics(Collections.singleton(newTopic)).all().get();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 
     private static Properties initConf() {
@@ -82,9 +108,10 @@ public class ComplexKafkaProducer {
     public void producer() {
         Properties config = initConf();
         // produer构造器： 主要初始化了消息累加器、IO Thread发送线程
+        // 注：构建的Producer的泛型和前面的key和value的序列化类型式对应的。
         try (Producer<String, String> producer = new KafkaProducer<String, String>(config);) {
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(ComplexKafkaConstant.COMPLEX_TOPIC, "hello", "complex val");
+            ProducerRecord<String, String> record = new ProducerRecord<>(COMPLEX_TOPIC, "hello", "complex val");
             Future<RecordMetadata> ft = producer.send(record, new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {

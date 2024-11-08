@@ -72,6 +72,7 @@ public class SimpleKafkaConsumer {
         // poll拉取数据，弹性，按需，拉取多少
 //        config.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,"");
 
+        // 注：构建的Consumer的泛型和前面的key和value的反序列化类型式对应的。
         try (Consumer<String, String> consumer = new KafkaConsumer<String, String>(config);) {
 
             // 订阅topic
@@ -142,6 +143,7 @@ public class SimpleKafkaConsumer {
         // poll拉取数据，弹性，按需，拉取多少
 //        config.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,"");
 
+        // 注：构建的Consumer的泛型和前面的key和value的反序列化类型式对应的。
         try (Consumer<String, String> consumer = new KafkaConsumer<String, String>(config);) {
 
             // 订阅topic
@@ -254,6 +256,7 @@ public class SimpleKafkaConsumer {
         // poll拉取数据，弹性，按需，拉取多少
 //        config.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,"");
 
+        // 注：构建的Consumer的泛型和前面的key和value的反序列化类型式对应的。
         try (Consumer<String, String> consumer = new KafkaConsumer<String, String>(config);) {
 
             // 订阅topic

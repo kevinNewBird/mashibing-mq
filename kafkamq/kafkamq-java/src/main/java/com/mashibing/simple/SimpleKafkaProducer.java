@@ -1,12 +1,17 @@
 package com.mashibing.simple;
 
 import com.mashibing.base.BaseKafkaConstant;
+import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -23,6 +28,30 @@ import static com.mashibing.simple.SimpleKafkaConstant.SIMPLE_TOPIC;
 public class SimpleKafkaProducer {
 
     private static Logger logger = LoggerFactory.getLogger(SimpleKafkaProducer.class);
+
+    @Before
+    public void createTopic() {
+        // 1.kafka配置连接信息
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
+        // 2.构建kafka broker客户端对象
+        try (AdminClient admin = AdminClient.create(props);) {
+            // 2.1.检查主题topic是否存在
+            KafkaFuture<Boolean> existFuture = admin.describeTopics(Collections.singleton(SIMPLE_TOPIC)).allTopicNames()
+                    .thenApply(map -> map.containsKey(SIMPLE_TOPIC));
+            Boolean isExists = existFuture.get();
+            // 2.2.判断主题topic是否存在
+            if (isExists) {
+                return;
+            }
+            // 2.3.构建主题对象，并创建
+            NewTopic newTopic = new NewTopic(SIMPLE_TOPIC, 3, (short) 2);
+            // -- 阻塞等待其完成
+            admin.createTopics(Collections.singleton(newTopic)).all().get();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
 
     /**
@@ -58,6 +87,8 @@ public class SimpleKafkaProducer {
 //        config.setProperty(ProducerConfig.ACKS_CONFIG, "0");
         // 指定自己的分区器
 //        config.setProperty(ProducerConfig.PARTITIONER_CLASS_CONFIG, SimplePartitioner.class.getName());
+
+        // 注：构建的Producer的泛型和前面的key和value的序列化类型式对应的。
         Producer<String, String> producer = new KafkaProducer<>(config);
 
         ////现在的producer就是一个提供者，面向的其实是BFker，虽然在使用的时候我们期望把数据打入topic
