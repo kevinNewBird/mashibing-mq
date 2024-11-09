@@ -8,6 +8,6 @@ package com.mashibing.complex;
  */
 public class ComplexKafkaConstant {
 
-    public static final String COMPLEX_TOPIC = "complex-s001";
+    public static final String COMPLEX_TOPIC = "complex-s003";
 
 }

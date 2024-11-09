@@ -18,7 +18,7 @@ public abstract class BaseKafkaConstant {
         if (StringUtils.containsIgnoreCase(os, "windows")) {
             BOOT_SERVERS = "172.22.124.60:9092,172.22.124.60:9094,172.22.124.60:9096";
         } else { // mac
-            BOOT_SERVERS = "10.211.55.13:9092";
+            BOOT_SERVERS = "10.211.55.13:9094,10.211.55.13:9096,10.211.55.13:9098";
         }
     }
 }

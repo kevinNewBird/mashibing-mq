@@ -2,6 +2,7 @@ package com.mashibing.complex;
 
 import com.mashibing.base.BaseKafkaConstant;
 import org.apache.kafka.clients.admin.AdminClient;
+import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.clients.producer.internals.DefaultPartitioner;
@@ -27,27 +28,6 @@ import static com.mashibing.complex.ComplexKafkaConstant.COMPLEX_TOPIC;
 public class ComplexKafkaProducer {
 
     private static final Logger logger = LoggerFactory.getLogger(ComplexKafkaProducer.class);
-
-    @Before
-    public void createTopic() {
-        // kafka配置连接信息
-        Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
-        try (AdminClient admin = AdminClient.create(props);) {
-            KafkaFuture<Boolean> existFuture = admin.describeTopics(Collections.singleton(COMPLEX_TOPIC)).allTopicNames().thenApply(map -> map.containsKey(COMPLEX_TOPIC));
-            Boolean isExists = existFuture.get();
-            // 判断是否存在
-            if (isExists) {
-                return;
-            }
-            NewTopic newTopic = new NewTopic(COMPLEX_TOPIC, 3, (short) 2);
-            // 阻塞等待其完成
-            admin.createTopics(Collections.singleton(newTopic)).all().get();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
 
     private static Properties initConf() {
         Properties conf = new Properties();
@@ -102,6 +82,28 @@ public class ComplexKafkaProducer {
 
 
         return conf;
+    }
+
+    @Before
+    public void createTopic() {
+        // kafka配置连接信息
+        Properties props = new Properties();
+        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
+        try (AdminClient admin = AdminClient.create(props);) {
+            // 不建议使用describeTopics，当topic不存在时将会报错
+            KafkaFuture<Boolean> existFuture = admin.listTopics().names()
+                    .thenApply(names -> names.contains(COMPLEX_TOPIC));
+            Boolean isExists = existFuture.get();
+            // 判断是否存在
+            if (isExists) {
+                return;
+            }
+            NewTopic newTopic = new NewTopic(COMPLEX_TOPIC, 3, (short) 2);
+            // 阻塞等待其完成
+            admin.createTopics(Collections.singleton(newTopic)).all().get();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Test

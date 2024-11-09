@@ -99,7 +99,8 @@ public class SimpleKafkaConsumer {
                 // 拉取小批次的数据(0表示一直阻塞直到拉取到数据，>0表示超过该时间不在阻塞获取)
                 // （！！！）思考：当只有一个consumer时，订阅了2个分区，那么这个批次数据是怎么拉取呢？
                 // 结论：见consumer1()
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(0));
+                // 每隔2s从broker获取消息
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(2));
 
                 // 以下代码的优化很重要
 

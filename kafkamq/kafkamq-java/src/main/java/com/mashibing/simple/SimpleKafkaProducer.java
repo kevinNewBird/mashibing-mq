@@ -36,9 +36,9 @@ public class SimpleKafkaProducer {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
         // 2.构建kafka broker客户端对象
         try (AdminClient admin = AdminClient.create(props);) {
-            // 2.1.检查主题topic是否存在
-            KafkaFuture<Boolean> existFuture = admin.describeTopics(Collections.singleton(SIMPLE_TOPIC)).allTopicNames()
-                    .thenApply(map -> map.containsKey(SIMPLE_TOPIC));
+            // 2.1.检查主题topic是否存在。不建议使用describeTopics，当topic不存在时将会报错
+            KafkaFuture<Boolean> existFuture = admin.listTopics().names()
+                    .thenApply(names -> names.contains(SIMPLE_TOPIC));
             Boolean isExists = existFuture.get();
             // 2.2.判断主题topic是否存在
             if (isExists) {
