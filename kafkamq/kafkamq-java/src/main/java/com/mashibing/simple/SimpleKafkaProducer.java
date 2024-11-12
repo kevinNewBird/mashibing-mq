@@ -1,17 +1,14 @@
 package com.mashibing.simple;
 
 import com.mashibing.base.BaseKafkaConstant;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.NewTopic;
+import com.mashibing.base.BaseTest;
 import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -25,32 +22,13 @@ import static com.mashibing.simple.SimpleKafkaConstant.SIMPLE_TOPIC;
  * create by: zhaosong 2023/3/29
  * version: 1.0
  */
-public class SimpleKafkaProducer {
+public class SimpleKafkaProducer extends BaseTest {
 
-    private static Logger logger = LoggerFactory.getLogger(SimpleKafkaProducer.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimpleKafkaProducer.class);
 
     @Before
     public void createTopic() {
-        // 1.kafka配置连接信息
-        Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
-        // 2.构建kafka broker客户端对象
-        try (AdminClient admin = AdminClient.create(props);) {
-            // 2.1.检查主题topic是否存在。不建议使用describeTopics，当topic不存在时将会报错
-            KafkaFuture<Boolean> existFuture = admin.listTopics().names()
-                    .thenApply(names -> names.contains(SIMPLE_TOPIC));
-            Boolean isExists = existFuture.get();
-            // 2.2.判断主题topic是否存在
-            if (isExists) {
-                return;
-            }
-            // 2.3.构建主题对象，并创建
-            NewTopic newTopic = new NewTopic(SIMPLE_TOPIC, 3, (short) 2);
-            // -- 阻塞等待其完成
-            admin.createTopics(Collections.singleton(newTopic)).all().get();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        createTopic(SIMPLE_TOPIC, 3, (short) 2);
     }
 
 
@@ -102,8 +80,7 @@ public class SimpleKafkaProducer {
                     RecordMetadata rm = future.get();
                     int partition = rm.partition();
                     long offset = rm.offset();
-                    logger.info("topic: {},key: {}, val: {}, partition: {}, offset: {}"
-                            , record.topic(), record.key(), record.value(), partition, offset);
+                    logger.info("topic: {},key: {}, val: {}, partition: {}, offset: {}", record.topic(), record.key(), record.value(), partition, offset);
                 } catch (InterruptedException | ExecutionException e) {
                     logger.error("[TOPIC:simple-s001]发送消息发生错误！", e);
                 }

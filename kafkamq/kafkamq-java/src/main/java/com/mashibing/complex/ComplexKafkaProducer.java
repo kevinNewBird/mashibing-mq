@@ -1,19 +1,15 @@
 package com.mashibing.complex;
 
 import com.mashibing.base.BaseKafkaConstant;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.NewTopic;
+import com.mashibing.base.BaseTest;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.clients.producer.internals.DefaultPartitioner;
-import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
@@ -25,7 +21,7 @@ import static com.mashibing.complex.ComplexKafkaConstant.COMPLEX_TOPIC;
  * create by: zhaosong 2023/4/12
  * version: 1.0
  */
-public class ComplexKafkaProducer {
+public class ComplexKafkaProducer extends BaseTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ComplexKafkaProducer.class);
 
@@ -86,24 +82,7 @@ public class ComplexKafkaProducer {
 
     @Before
     public void createTopic() {
-        // kafka配置连接信息
-        Properties props = new Properties();
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS);
-        try (AdminClient admin = AdminClient.create(props);) {
-            // 不建议使用describeTopics，当topic不存在时将会报错
-            KafkaFuture<Boolean> existFuture = admin.listTopics().names()
-                    .thenApply(names -> names.contains(COMPLEX_TOPIC));
-            Boolean isExists = existFuture.get();
-            // 判断是否存在
-            if (isExists) {
-                return;
-            }
-            NewTopic newTopic = new NewTopic(COMPLEX_TOPIC, 3, (short) 2);
-            // 阻塞等待其完成
-            admin.createTopics(Collections.singleton(newTopic)).all().get();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        createTopic(COMPLEX_TOPIC, 3, (short) 2);
     }
 
     @Test
