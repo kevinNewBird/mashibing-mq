@@ -3,7 +3,7 @@ package com.mashibing.serializer;
 import com.mashibing.base.BaseKafkaConstant;
 import com.mashibing.base.BaseTest;
 import com.mashibing.serializer.impl.UserSerializer;
-import com.mashibing.serializer.pojo.User;
+import com.mashibing.pojo.User;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;

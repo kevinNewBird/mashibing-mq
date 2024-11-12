@@ -1,4 +1,4 @@
-package com.mashibing.serializer.pojo;
+package com.mashibing.pojo;
 
 import lombok.*;
 

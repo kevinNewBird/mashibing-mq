@@ -1,6 +1,6 @@
 package com.mashibing.serializer.impl;
 
-import com.mashibing.serializer.pojo.User;
+import com.mashibing.pojo.User;
 import org.apache.commons.lang3.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 

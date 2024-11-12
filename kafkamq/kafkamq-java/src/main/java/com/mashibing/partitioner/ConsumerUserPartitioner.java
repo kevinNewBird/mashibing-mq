@@ -1,9 +1,9 @@
-package com.mashibing.serializer;
+package com.mashibing.partitioner;
 
 import com.mashibing.base.BaseKafkaConstant;
 import com.mashibing.base.BaseTest;
-import com.mashibing.serializer.impl.UserDeserializer;
 import com.mashibing.pojo.User;
+import com.mashibing.serializer.impl.UserDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -24,9 +24,9 @@ import java.util.Properties;
  * create by: zhaosong 2024/11/12
  * version: 1.0
  */
-public class ConsumerUser extends BaseTest {
+public class ConsumerUserPartitioner extends BaseTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerUser.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsumerUserPartitioner.class);
 
     private static final String GROUP_ID = "group01";
 
@@ -36,7 +36,7 @@ public class ConsumerUser extends BaseTest {
      */
     @Before
     public void createTopic() {
-        createTopic(ProducerUser.USER_TOPIC, 3, (short) 2);
+        createTopic(ProducerUserPartitioner.USER_TOPIC, 3, (short) 2);
     }
 
     /**
@@ -51,7 +51,7 @@ public class ConsumerUser extends BaseTest {
         // 构建生产者对象
         try (KafkaConsumer<String, User> consumer = new KafkaConsumer<>(props);) {
             // 订阅消费TOPIC
-            consumer.subscribe(Collections.singleton(ProducerUser.USER_TOPIC));
+            consumer.subscribe(Collections.singleton(ProducerUserPartitioner.USER_TOPIC));
             // 循环拉取信息（监听）
             while (true) {
                 // 每隔2秒，拉取准备就绪的信息列表
