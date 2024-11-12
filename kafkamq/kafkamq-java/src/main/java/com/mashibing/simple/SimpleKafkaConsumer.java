@@ -378,8 +378,10 @@ public class SimpleKafkaConsumer {
 
                 }
 
-                // 第三种提交方式: 按poll拉取的当前批次处理
+                // 第三种提交方式: 按poll拉取的当前批次处理(同步提交一定会成功)
                 consumer.commitSync();
+
+//                consumer.commitAsync(); // 异步提交；可能会失败
             }
         }
 
