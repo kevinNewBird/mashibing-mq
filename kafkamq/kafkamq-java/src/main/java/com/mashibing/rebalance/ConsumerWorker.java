@@ -49,6 +49,9 @@ public class ConsumerWorker implements Runnable {
         try {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(500));
+                if (records.isEmpty()) {
+                    continue;
+                }
                 //业务处理
                 //开始事务
                 for (ConsumerRecord<String, String> record : records) {
