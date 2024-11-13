@@ -3,8 +3,6 @@ package com.mashibing.commit;
 import com.mashibing.base.BaseKafkaConstant;
 import com.mashibing.base.BaseTest;
 import com.mashibing.pojo.User;
-import com.mashibing.serializer.ConsumerUser;
-import com.mashibing.serializer.ProducerUser;
 import com.mashibing.serializer.impl.UserDeserializer;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
