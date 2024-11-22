@@ -68,7 +68,7 @@ public class ConsumerManualCommit extends BaseTest {
             logger.error("Failed to receive message!", ex);
         } finally {
             // 同步提交，确保发生异常时，能成功的提交ack（一定会成功，失败内部会重试）
-            consumer.commitAsync();
+            consumer.commitSync();
             // 释放客户端资源
             consumer.close();
         }

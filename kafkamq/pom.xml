@@ -10,6 +10,8 @@
     </parent>
     <modules>
         <module>kafkamq-java</module>
+        <module>kafkamq-producer-springboot</module>
+        <module>kafkamq-consumer-springboot</module>
     </modules>
 
     <artifactId>kafkamq</artifactId>
