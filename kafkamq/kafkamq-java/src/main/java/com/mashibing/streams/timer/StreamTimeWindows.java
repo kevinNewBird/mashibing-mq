@@ -1,6 +1,7 @@
 package com.mashibing.streams.timer;
 
 
+import com.mashibing.base.BaseKafkaConstant;
 import com.mashibing.streams.StreamProducer;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
@@ -29,7 +30,7 @@ public class StreamTimeWindows {
         /*每个stream应用都必须有唯一的id*/
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "count-window");
         // 指定连接的kafka服务器的地址
-        properties.put("bootstrap.servers", "127.0.0.1:9092");
+        properties.put("bootstrap.servers", BaseKafkaConstant.BOOT_SERVERS);
         properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 3000);  //提交时间设置为3秒
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass()); //输入key的类型
         properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());  //输入value的类型
