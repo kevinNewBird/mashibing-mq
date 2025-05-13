@@ -13,6 +13,8 @@ public abstract class BaseKafkaConstant {
 
     public static final String BOOT_SERVERS;
 
+    public static final String BOOT_SERVERS_ACL= "192.168.231.150:9092";
+
     static {
         String os = System.getProperty("os.name");
         if (StringUtils.containsIgnoreCase(os, "windows")) {
