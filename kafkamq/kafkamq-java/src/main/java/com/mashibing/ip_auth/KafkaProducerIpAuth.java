@@ -1,4 +1,4 @@
-package com.mashibing.acl;
+package com.mashibing.ip_auth;
 
 import com.mashibing.base.BaseKafkaConstant;
 import com.mashibing.base.BaseTest;
@@ -14,24 +14,22 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
 
-import static com.mashibing.simple.SimpleKafkaConstant.SIMPLE_TOPIC;
-
 /**
  * description: com.mashibing.simple
  * company: 北京海量数据有限公司
  * create by: zhaosong 2023/3/29
  * version: 1.0
  */
-public class KafkaProducerAcl extends BaseTest {
+public class KafkaProducerIpAuth extends BaseTest {
 
-    public static String SIMPLE_TOPIC = "test2";
+    public static String SIMPLE_TOPIC = "test_ip";
 
-    private static final Logger logger = LoggerFactory.getLogger(KafkaProducerAcl.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaProducerIpAuth.class);
 
-    @Before
-    public void createTopic() {
-        createTopic(true, SIMPLE_TOPIC, 1, (short) 1);
-    }
+//    @Before
+//    public void createTopic() {
+//        createTopic(SIMPLE_TOPIC, 1, (short) 1);
+//    }
 
     // 参考链接：https://www.cnblogs.com/jiaxzeng/p/17219061.html
     // 参考链接2: https://www.cnblogs.com/route/p/18783755
@@ -53,18 +51,12 @@ public class KafkaProducerAcl extends BaseTest {
         // 配置kafka生产者
         Properties config = new Properties();
         // 注：确保服务器的防火墙关闭
-        config.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS_ACL);
+        config.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BaseKafkaConstant.BOOT_SERVERS_IP_AUTH);
 
         //kafka 持久化数据的MQ 数据-> byte[]，不会对数据进行干预，双方要约定编解码
         //kafka是一个app: : 使用零拷贝sendfile 系统调用实现快速数据消费
         config.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         config.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        //  用户名密码
-        config.put("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"ops\" password=\"ops-secret\";");
-        //  sasl
-        config.put("security.protocol", "SASL_PLAINTEXT");
-        //   sasl
-        config.put("sasl.mechanism", "SCRAM-SHA-512");
         /**
          * 为确保消息发送的可靠性，提供了acks属性，关于acks取值的说明（0,1,-1）:
          * 0: 生产者只管发送数据，即发送出去就认为是成功，缺点是：极有可能丢失数据（控制台打印的offset恒等于-1）

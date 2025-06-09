@@ -1,6 +1,5 @@
-package com.mashibing.acl;
+package com.mashibing.sasl;
 
-import com.mashibing.base.BaseKafkaConstant;
 import com.mashibing.simple.SimpleKafkaProducer;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
@@ -13,7 +12,6 @@ import java.time.Duration;
 import java.util.*;
 
 import static com.mashibing.base.BaseKafkaConstant.BOOT_SERVERS_ACL;
-import static com.mashibing.simple.SimpleKafkaConstant.SIMPLE_TOPIC;
 
 /**
  * description: com.mashibing.simple
@@ -39,11 +37,11 @@ public class KafkaConsumerAcl {
         config.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         //  用户名密码
-        config.put("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"ops\" password=\"ops-secret\";");
+        config.put("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"admin\" password=\"adminsecret\";");
         //  sasl
         config.put("security.protocol", "SASL_PLAINTEXT");
         //   sasl
-        config.put("sasl.mechanism", "SCRAM-SHA-512");
+        config.put("sasl.mechanism", "SCRAM-SHA-256");
 
         // 消费的细节(消费指定的组)
         config.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "group010");
